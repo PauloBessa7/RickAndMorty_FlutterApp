@@ -42,10 +42,23 @@ class _HomeViewState extends State<HomeView> {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is CharacterLoaded) {
                   final characters = state.filteredCharacters;
-                  return GridView.count(
-                    crossAxisCount: 2,
-                    children:
-                        characters.map((character) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      int crossAxisCount = 2;
+                      if (constraints.maxWidth >= 1200) {
+                        crossAxisCount = 6;
+                      } else if (constraints.maxWidth >= 900) {
+                        crossAxisCount = 4;
+                      } else if (constraints.maxWidth >= 600) {
+                        crossAxisCount = 3;
+                      }
+
+                      return GridView.count(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                        padding: const EdgeInsets.all(8),
+                        children: characters.map((character) {
                           return Card(
                             child: Stack(
                               children: [
@@ -53,16 +66,20 @@ class _HomeViewState extends State<HomeView> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder:
-                                            (context) => CharacterDetail(
-                                              character: character,
-                                            ),
+                                        builder: (context) => CharacterDetail(
+                                          character: character,
+                                        ),
                                       ),
                                     );
                                   },
                                   child: Hero(
                                     tag: character.id,
-                                    child: Image.network(character.image),
+                                    child: Image.network(
+                                      character.image,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 Align(
@@ -93,6 +110,8 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           );
                         }).toList(),
+                      );
+                    },
                   );
                 } else if (state is CharacterError) {
                   return Center(child: Text(state.message));
