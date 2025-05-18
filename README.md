@@ -61,5 +61,8 @@ lib/
 2. Instalar dependencias com flutter pub get
 3. por fim flutter run
 
+---
 
+![image](https://github.com/user-attachments/assets/90ac6ef2-02f9-4e9a-bfe5-e30775785369)
+![image](https://github.com/user-attachments/assets/bf9a0230-ef83-4fd0-899a-c46782e15f11)
 
