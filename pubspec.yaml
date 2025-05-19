@@ -28,3 +28,8 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/dice1.png
+    - assets/dice2.png
+    - assets/dice3.png

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_game/models/character.dart';
+import 'package:rick_and_morty_game/views/game/pages/game_view.dart';
 
 class CharacterDetail extends StatelessWidget {
   final Character character;
@@ -31,6 +32,16 @@ class CharacterDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => GameView(character: character),
+            ),
+          );
+        },
+        child: Text('Jogar'),
+      ),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -40,10 +51,7 @@ class CharacterDetail extends StatelessWidget {
         ),
         title: Text(
           character.name,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         centerTitle: true,
       ),
@@ -152,7 +160,11 @@ class CharacterDetail extends StatelessWidget {
           Expanded(
             child: Text(
               "$label: $value",
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black),
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
