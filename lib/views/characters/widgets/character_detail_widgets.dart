@@ -31,12 +31,11 @@ class CharacterDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEFEFEF),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -44,7 +43,6 @@ class CharacterDetail extends StatelessWidget {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 22,
-            color: Colors.black,
           ),
         ),
         centerTitle: true,
@@ -144,11 +142,7 @@ class CharacterDetail extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: const Color(0xFFF9F9F9),
         boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 3),
-          )
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
         ],
       ),
       child: Row(
@@ -158,10 +152,7 @@ class CharacterDetail extends StatelessWidget {
           Expanded(
             child: Text(
               "$label: $value",
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black),
             ),
           ),
         ],

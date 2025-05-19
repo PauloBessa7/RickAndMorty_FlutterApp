@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rick_and_morty_game/configs/theme_controller.dart';
 import 'package:rick_and_morty_game/views/characters/viewmodel/character_bloc.dart';
 import 'package:rick_and_morty_game/views/characters/viewmodel/character_event.dart';
 import 'package:rick_and_morty_game/views/characters/viewmodel/character_state.dart';
@@ -19,8 +20,20 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Rick and Morty')),
+      appBar: AppBar(title: Text('Rick and Morty'),
+       actions: [
+          IconButton(
+            icon: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
+            onPressed: () {
+              // Alternar entre claro e escuro
+              themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark;
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
