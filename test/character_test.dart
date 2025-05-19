@@ -9,7 +9,8 @@ import 'package:rick_and_morty_game/repositories/character_repository.dart';
 
 class MockCharacterRepository extends Mock implements CharacterRepository {}
 
-void main() {
+void main() { // refazer tudo antes de entregar
+// + mockar todas as propriedades do Character
   late MockCharacterRepository mockRepository;
 
   setUp(() {
