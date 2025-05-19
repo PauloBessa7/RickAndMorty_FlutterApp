@@ -15,12 +15,12 @@ class GameLoaded extends GameState {
   final int enemyDiceRollRound;
 
   GameLoaded({
-    required this.playerDiceRollRound,
-    required this.enemyDiceRollRound,
+    this.playerDiceRollRound = 0,
+    this.enemyDiceRollRound = 0,
     required this.player,
     required this.enemy,
-    required this.playerPosition,
-    required this.enemyPosition,
+    this.playerPosition = 0,
+    this.enemyPosition = 0,
   });
 }
 

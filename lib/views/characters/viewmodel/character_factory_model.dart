@@ -17,8 +17,4 @@ final class CharacterFactoryViewModel implements IFactoryViewModel<CharacterBloc
   void dispose(BuildContext context, CharacterBloc viewModel) {
     viewModel.close();
   }
-
-}
-
-class CharacterViewModel {
 }

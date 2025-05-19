@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rick_and_morty_game/core/service/http_service.dart';
 import 'package:rick_and_morty_game/models/character.dart';
+import 'package:rick_and_morty_game/repositories/character_repository.dart';
+import 'package:rick_and_morty_game/repositories/game_repository.dart';
 import 'package:rick_and_morty_game/views/game/viewmodel/game_bloc.dart';
 import 'package:rick_and_morty_game/views/game/viewmodel/game_event.dart';
+import 'package:rick_and_morty_game/views/game/viewmodel/game_factory_model.dart';
 import 'package:rick_and_morty_game/views/game/viewmodel/game_state.dart';
 import 'package:rick_and_morty_game/views/game/widgets/build_column_track.dart';
 
@@ -13,7 +19,10 @@ class GameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GameBloc(character)..add(GameStartEvent(character)),
+      create:
+          (_) =>
+              GameFactoryViewModel().create(context)
+                ..add(GameStartEvent(character)),
       child: const GameScreen(),
     );
   }
