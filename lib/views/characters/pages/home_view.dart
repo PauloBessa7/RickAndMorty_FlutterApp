@@ -23,12 +23,12 @@ class _HomeViewState extends State<HomeView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Rick and Morty'),
-       actions: [
+      appBar: AppBar(
+        title: Text('Rick and Morty'),
+        actions: [
           IconButton(
             icon: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
             onPressed: () {
-              // Alternar entre claro e escuro
               themeNotifier.value = isDark ? ThemeMode.light : ThemeMode.dark;
             },
           ),
@@ -65,44 +65,67 @@ class _HomeViewState extends State<HomeView> {
                       } else if (constraints.maxWidth >= 600) {
                         crossAxisCount = 3;
                       }
-
-                      return GridView.count(
-                        crossAxisCount: crossAxisCount,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          childAspectRatio: 0.7,
+                        ),
                         padding: const EdgeInsets.all(8),
-                        children: characters.map((character) {
-                          return Card(
-                            child: Stack(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => CharacterDetail(
-                                          character: character,
+                        itemCount: characters.length,
+                        itemBuilder: (context, index) {
+                          final character = characters[index];
+                          return SizedBox(
+                            height: 250,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: Colors.grey.shade400,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => CharacterDetail(
+                                                  character: character,
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                      child: Hero(
+                                        tag: character.id,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(12),
+                                          ),
+                                          child: Image.network(
+                                            character.image,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  child: Hero(
-                                    tag: character.id,
-                                    child: Image.network(
-                                      character.image,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black87,
+                                      borderRadius: BorderRadius.vertical(
+                                        bottom: Radius.circular(12),
+                                      ),
+                                    ),
                                     padding: EdgeInsets.all(8.0),
-                                    width: double.infinity,
-                                    color: Colors.black54,
                                     child: Column(
-                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           character.name,
@@ -110,19 +133,23 @@ class _HomeViewState extends State<HomeView> {
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
                                           'Espécie: ${character.species}',
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
-                        }).toList(),
+                        },
                       );
                     },
                   );
