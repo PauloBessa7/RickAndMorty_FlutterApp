@@ -15,7 +15,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    context.read<CharacterBloc>().add(FetchCharacters());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CharacterBloc>().add(FetchCharacters());
+    });
   }
 
   @override
@@ -24,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rick and Morty'),
+        title: const Text('Rick and Morty'),
         actions: [
           IconButton(
             icon: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
@@ -39,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Buscar personagem',
                 border: OutlineInputBorder(),
               ),
@@ -52,9 +54,10 @@ class _HomeViewState extends State<HomeView> {
             child: BlocBuilder<CharacterBloc, CharacterState>(
               builder: (context, state) {
                 if (state is CharacterLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (state is CharacterLoaded) {
                   final characters = state.filteredCharacters;
+
                   return LayoutBuilder(
                     builder: (context, constraints) {
                       int crossAxisCount = 2;
@@ -65,98 +68,111 @@ class _HomeViewState extends State<HomeView> {
                       } else if (constraints.maxWidth >= 600) {
                         crossAxisCount = 3;
                       }
-                      return GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8,
-                          childAspectRatio: 0.7,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        itemCount: characters.length,
-                        itemBuilder: (context, index) {
-                          final character = characters[index];
-                          return SizedBox(
-                            height: 250,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(
-                                  color: Colors.grey.shade400,
-                                  width: 1,
-                                ),
+
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Número de humanos: ${state.countHumans}\t|\tNúmero de aliens: ${state.countAliens}',
+                            ),
+                          ),
+                          Expanded(
+                            child: GridView.builder(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 8,
+                                mainAxisSpacing: 8,
+                                childAspectRatio: 0.7,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) => CharacterDetail(
-                                                  character: character,
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      child: Hero(
-                                        tag: character.id,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(12),
-                                          ),
-                                          child: Image.network(
-                                            character.image,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                              padding: const EdgeInsets.all(8),
+                              itemCount: characters.length,
+                              itemBuilder: (context, index) {
+                                final character = characters[index];
+                                return SizedBox(
+                                  height: 250,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide(
+                                        color: Colors.grey.shade400,
+                                        width: 1,
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black87,
-                                      borderRadius: BorderRadius.vertical(
-                                        bottom: Radius.circular(12),
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.all(8.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
-                                        Text(
-                                          character.name,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (_) => CharacterDetail(character: character),
+                                                ),
+                                              );
+                                            },
+                                            child: Hero(
+                                              tag: character.id,
+                                              child: ClipRRect(
+                                                borderRadius: const BorderRadius.vertical(
+                                                  top: Radius.circular(12),
+                                                ),
+                                                child: Image.network(
+                                                  character.image,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        Text(
-                                          'Espécie: ${character.species}',
-                                          style: TextStyle(
-                                            color: Colors.white70,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: (character.species == 'Human')
+                                                ? Colors.green
+                                                : (character.species == 'Alien')
+                                                    ? Colors.red
+                                                    : Colors.black54,
+                                            borderRadius: const BorderRadius.vertical(
+                                              bottom: Radius.circular(12),
+                                            ),
                                           ),
-                                          overflow: TextOverflow.ellipsis,
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                character.name,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                'Espécie: ${character.species}',
+                                                style: const TextStyle(
+                                                  color: Colors.white70,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       );
                     },
                   );
                 } else if (state is CharacterError) {
                   return Center(child: Text(state.message));
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
             ),

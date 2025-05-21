@@ -9,8 +9,9 @@ class CharacterLoading extends CharacterState {}
 class CharacterLoaded extends CharacterState {
   final List<Character> allCharacters;
   final List<Character> filteredCharacters;
-
-  CharacterLoaded(this.allCharacters, this.filteredCharacters);
+  final int countHumans;
+  final int countAliens;
+  CharacterLoaded(this.allCharacters, this.filteredCharacters, this.countHumans, this.countAliens);
 }
 
 class CharacterError extends CharacterState {

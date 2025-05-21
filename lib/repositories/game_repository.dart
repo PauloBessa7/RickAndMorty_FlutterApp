@@ -21,7 +21,7 @@ class GameRepository implements IGameRepository {
     final random = Random();
     int enemyId;
     do {
-      enemyId = random.nextInt(826) + 1; // IDs válidos: 1 a 826
+      enemyId = random.nextInt(826) + 1;
     } while (enemyId == excludedId);
 
     final response = fetchCharacter(enemyId);
@@ -31,11 +31,8 @@ class GameRepository implements IGameRepository {
 
   @override
   Future<Character> fetchCharacter(int id) async {
-    final response = await service.fetchData(_environment.urlCharacter, id);
-    final Character character = Character.fromJson(response.results[0]);
-    print(character);
+    final response = await service.fetchDataWithId(_environment.urlCharacter, id);
+    final Character character = response;
     return character;
   }
-
-  
 }

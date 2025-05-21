@@ -65,7 +65,7 @@ void main() { // Refazer tudo antes de entregar
     build: () {
       return CharacterBloc(mockRepository);
     },
-    seed: () => CharacterLoaded(fakeCharacters, fakeCharacters),
+    seed: () => CharacterLoaded(fakeCharacters, fakeCharacters, 0, 0),
     act: (bloc) => bloc.add(FilterCharacters('rick')),
     expect:
         () => [

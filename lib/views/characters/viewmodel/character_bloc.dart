@@ -7,13 +7,17 @@ import 'package:rick_and_morty_game/repositories/character_repository.dart';
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   final ICharacterRepository repository;
   List<Character> _allCharacters = [];
+  int countHumans = 0;
+  int countAliens = 0;
 
   CharacterBloc(this.repository) : super(CharacterInitial()) {
     on<FetchCharacters>((event, emit) async {
       emit(CharacterLoading());
       try {
         _allCharacters = await repository.fetchCharacters(); 
-        emit(CharacterLoaded(_allCharacters, _allCharacters));
+        countHumans = _allCharacters.where((character) => character.species == 'Human').length;
+        countAliens = _allCharacters.where((character) => character.species == 'Alien').length;
+        emit(CharacterLoaded(_allCharacters, _allCharacters, countHumans, countAliens));
       } catch (e) {
         emit(CharacterError('Erro ao carregar personagens'));
       }
@@ -25,7 +29,7 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
           return character.name.toLowerCase().startsWith(event.query.toLowerCase());
         }).toList();
 
-        emit(CharacterLoaded(_allCharacters, filtered));
+        emit(CharacterLoaded(_allCharacters, filtered, countHumans, countAliens));
       }
     });
   }
